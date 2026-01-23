@@ -218,7 +218,7 @@ function App() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-2">
-            <Cloud size={40} className="text-white" />
+            <img src="/skysync-logo-min.png" alt="SkySync" className="w-10 h-10" />
             <h1 className="text-4xl md:text-5xl font-bold text-white">
               SkySync
             </h1>
