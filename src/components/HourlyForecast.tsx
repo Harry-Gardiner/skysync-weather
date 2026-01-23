@@ -1,5 +1,5 @@
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeft, ChevronRight, Droplets } from "lucide-react";
+import { ChevronLeft, ChevronRight, Droplets, Wind } from "lucide-react";
 import { useCallback } from "react";
 import { HourlyForecast } from "../types";
 import { getWeatherIcon, getWeatherDescription } from "../utils/weatherUtils";
@@ -79,9 +79,15 @@ export default function HourlyForecastCarousel({
                   {Math.round(hour.temp)}
                   {tempUnit}
                 </div>
-                <div className="flex items-center justify-center gap-1 text-xs text-white/70">
-                  <Droplets size={12} />
-                  <span>{hour.precipitationChance}%</span>
+                <div className="space-y-1">
+                  <div className="flex items-center justify-center gap-1 text-xs text-white/70">
+                    <Droplets size={12} />
+                    <span>{hour.precipitationChance}%</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-1 text-xs text-white/70">
+                    <Wind size={12} />
+                    <span>{Math.round(hour.windSpeed)}</span>
+                  </div>
                 </div>
               </div>
             );

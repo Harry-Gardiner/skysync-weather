@@ -8,30 +8,40 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
+      includeAssets: [
+        "favicon.ico",
+        "apple-touch-icon-180x180.png",
+        "skysync-logo-min.png",
+      ],
       manifest: {
         name: "SkySync Weather",
         short_name: "SkySync",
-        description: "A beautiful weather PWA with offline support",
+        description:
+          "Your Personal Weather Companion - Get accurate, real-time weather forecasts with 7-day forecasts, air quality data, and offline support.",
         theme_color: "#0ea5e9",
-        background_color: "#0c4a6e",
+        background_color: "#ffffff",
         display: "standalone",
+        orientation: "portrait",
+        scope: "/",
+        start_url: "/",
         icons: [
           {
-            src: "pwa-192x192.png",
+            src: "/android-chrome-192x192.png",
             sizes: "192x192",
             type: "image/png",
+            purpose: "any",
           },
           {
-            src: "pwa-512x512.png",
+            src: "/android-chrome-512x512.png",
             sizes: "512x512",
             type: "image/png",
+            purpose: "any",
           },
           {
-            src: "pwa-512x512.png",
+            src: "/android-chrome-512x512.png",
             sizes: "512x512",
             type: "image/png",
-            purpose: "any maskable",
+            purpose: "maskable",
           },
         ],
       },

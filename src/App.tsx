@@ -7,6 +7,7 @@ import HourlyForecast from "./components/HourlyForecast";
 import Favorites from "./components/Favorites";
 import Settings, { UserSettings } from "./components/Settings";
 import AirQuality from "./components/AirQuality";
+import InstallPrompt from "./components/InstallPrompt";
 import { Location, WeatherData, AirQualityData } from "./types";
 import { fetchWeatherData, fetchAirQuality } from "./services/weatherService";
 import { getBackgroundGradient } from "./utils/weatherUtils";
@@ -371,6 +372,9 @@ function App() {
           </div>
         )}
       </div>
+
+      {/* Install Prompt */}
+      <InstallPrompt />
     </div>
   );
 }
