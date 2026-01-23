@@ -15,7 +15,7 @@ export default function AirQuality({ data }: AirQualityProps) {
   };
 
   return (
-    <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 text-white shadow-xl">
+    <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 text-white shadow-xl">
       <div className="flex items-center justify-between gap-4">
         {/* Left: Icon and description */}
         <div className="flex items-center gap-3 flex-1 min-w-0">

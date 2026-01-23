@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Cloud, WifiOff, RefreshCw } from "lucide-react";
 import SearchBar from "./components/SearchBar";
 import CurrentWeather from "./components/CurrentWeather";
-import Forecast from "./components/Forecast";
+import ForecastCarousel from "./components/ForecastCarousel";
+import HourlyForecast from "./components/HourlyForecast";
 import Favorites from "./components/Favorites";
 import Settings, { UserSettings } from "./components/Settings";
 import AirQuality from "./components/AirQuality";
@@ -218,7 +219,11 @@ function App() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-2">
-            <img src="/skysync-logo-min.png" alt="SkySync" className="w-10 h-10" />
+            <img
+              src="/skysync-logo-min.png"
+              alt="SkySync"
+              className="w-10 h-10"
+            />
             <h1 className="text-4xl md:text-5xl font-bold text-white">
               SkySync
             </h1>
@@ -320,11 +325,14 @@ function App() {
               }}
             />
 
+            {/* Hourly Forecast */}
+            <HourlyForecast hourly={weatherData.hourly} settings={settings} />
+
             {/* Air Quality */}
             {airQuality && <AirQuality data={airQuality} />}
 
             {/* 7-Day Forecast */}
-            <Forecast
+            <ForecastCarousel
               data={weatherData}
               settings={settings}
               location={location}

@@ -124,7 +124,7 @@ export async function fetchWeatherData(
       `https://api.open-meteo.com/v1/forecast?` +
         `latitude=${lat}&longitude=${lon}&` +
         `current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m&` +
-        `hourly=precipitation_probability&` +
+        `hourly=temperature_2m,precipitation_probability,weather_code,is_day&` +
         `daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,uv_index_max&` +
         `temperature_unit=${temperatureUnit}&wind_speed_unit=${windSpeedUnit}&precipitation_unit=${precipUnit}&` +
         `timezone=auto&forecast_days=7`,
@@ -144,10 +144,25 @@ export async function fetchWeatherData(
     );
     const sunData = await sunResponse.json();
 
-    // Get current hour's precipitation probability
-    const currentHour = new Date().getHours();
-    const currentPrecipChance =
-      data.hourly.precipitation_probability[currentHour] || 0;
+    // Get next 24 hours of hourly data
+    const currentTime = new Date().getTime();
+    const hourlyForecasts = data.hourly.time
+      .map((time: string, index: number) => ({
+        time: new Date(time).getTime() / 1000,
+        temp: data.hourly.temperature_2m[index],
+        weatherCode: data.hourly.weather_code[index],
+        precipitationChance: data.hourly.precipitation_probability[index] || 0,
+        isDay: data.hourly.is_day[index] === 1,
+      }))
+      .filter(
+        (hour: any) =>
+          hour.time * 1000 >= currentTime &&
+          hour.time * 1000 < currentTime + 24 * 60 * 60 * 1000,
+      )
+      .slice(0, 24);
+
+    // Get current hour's precipitation probability from first hourly forecast
+    const currentPrecipChance = hourlyForecasts[0]?.precipitationChance || 0;
 
     const weatherData: WeatherData = {
       current: {
@@ -166,6 +181,7 @@ export async function fetchWeatherData(
         sunset: new Date(sunData.daily.sunset[0]).getTime() / 1000,
         precipitationChance: currentPrecipChance,
       },
+      hourly: hourlyForecasts,
       daily: data.daily.time.map((date: string, index: number) => ({
         date: new Date(date).getTime() / 1000,
         tempMax: data.daily.temperature_2m_max[index],

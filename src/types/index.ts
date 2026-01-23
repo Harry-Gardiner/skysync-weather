@@ -32,8 +32,17 @@ export interface DailyForecast {
   windSpeed: number;
 }
 
+export interface HourlyForecast {
+  time: number;
+  temp: number;
+  weatherCode: number;
+  precipitationChance: number;
+  isDay: boolean;
+}
+
 export interface WeatherData {
   current: CurrentWeather;
+  hourly: HourlyForecast[];
   daily: DailyForecast[];
 }
 
