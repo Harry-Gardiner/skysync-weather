@@ -38,6 +38,7 @@ export interface HourlyForecast {
   temp: number;
   weatherCode: number;
   precipitationChance: number;
+  windSpeed: number;
   isDay: boolean;
 }
 

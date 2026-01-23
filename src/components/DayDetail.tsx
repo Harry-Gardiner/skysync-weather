@@ -6,8 +6,11 @@ import {
   Sunset,
   Thermometer,
   Eye,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import { getWeatherIcon, formatTime } from "../utils/weatherUtils";
 import { UserSettings } from "./Settings";
 
@@ -49,6 +52,20 @@ export default function DayDetail({
   const [loading, setLoading] = useState(true);
   const [sunrise, setSunrise] = useState<number>(0);
   const [sunset, setSunset] = useState<number>(0);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: "start",
+    slidesToScroll: 1,
+    dragFree: true,
+  });
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
 
   const tempUnit = settings.temperatureUnit === "celsius" ? "°C" : "°F";
   let speedUnit = "";
@@ -118,10 +135,10 @@ export default function DayDetail({
   }, [lat, lon, date, settings]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 backdrop-blur-sm overflow-y-auto py-4 md:py-8 md:items-center">
+      <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl shadow-2xl w-full max-w-4xl my-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-br from-blue-600 to-purple-600 z-10 flex items-center justify-between p-6 border-b border-white/20">
+        <div className="flex items-center justify-between p-6 border-b border-white/20">
           <div>
             <h2 className="text-3xl font-bold text-white flex items-center gap-3">
               <span className="text-4xl">
@@ -201,7 +218,27 @@ export default function DayDetail({
 
         {/* Hourly Forecast */}
         <div className="p-6">
-          <h3 className="text-xl font-bold text-white mb-4">Hourly Forecast</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-bold text-white">Hourly Forecast</h3>
+            {!loading && hourlyData.length > 0 && (
+              <div className="flex gap-2">
+                <button
+                  onClick={scrollPrev}
+                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                  aria-label="Previous"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  onClick={scrollNext}
+                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                  aria-label="Next"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+            )}
+          </div>
 
           {loading ? (
             <div className="text-center py-8">
@@ -209,52 +246,54 @@ export default function DayDetail({
               <p className="text-white/70 mt-2">Loading hourly data...</p>
             </div>
           ) : (
-            <div className="space-y-2">
-              {hourlyData.map((hour) => {
-                const hourTime = new Date(hour.time * 1000);
-                const hourStr = hourTime.toLocaleTimeString("en-US", {
-                  hour: "numeric",
-                  hour12: true,
-                });
-                const isNight = hour.time < sunrise || hour.time > sunset;
+            <div className="overflow-hidden" ref={emblaRef}>
+              <div className="flex gap-3">
+                {hourlyData.map((hour) => {
+                  const hourTime = new Date(hour.time * 1000);
+                  const hourStr = hourTime.toLocaleTimeString("en-US", {
+                    hour: "numeric",
+                    hour12: true,
+                  });
+                  const isNight = hour.time < sunrise || hour.time > sunset;
 
-                return (
-                  <div
-                    key={hour.time}
-                    className="bg-white/10 rounded-lg p-3 backdrop-blur-sm hover:bg-white/20 transition-colors"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="font-medium text-white min-w-[70px]">
-                        {hourStr}
-                      </div>
-
-                      <div className="text-2xl">
-                        {getWeatherIcon(hour.weatherCode, !isNight)}
-                      </div>
-
-                      <div className="text-lg font-bold text-white min-w-[60px] text-center">
-                        {hour.temp}
-                        {tempUnit}
-                      </div>
-
-                      <div className="flex items-center gap-4 text-sm text-white/80">
-                        <div className="flex items-center gap-1">
-                          <Droplets size={14} className="text-blue-300" />
-                          <span>{hour.precipitation}%</span>
+                  return (
+                    <div
+                      key={hour.time}
+                      className="flex-none w-28 bg-white/10 rounded-xl p-3 backdrop-blur-sm"
+                    >
+                      <div className="text-center">
+                        <div className="text-sm font-medium text-white mb-2">
+                          {hourStr}
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Wind size={14} className="text-blue-300" />
-                          <span>{hour.windSpeed}</span>
+
+                        <div className="text-3xl mb-2">
+                          {getWeatherIcon(hour.weatherCode, !isNight)}
                         </div>
-                        <div className="hidden sm:flex items-center gap-1">
-                          <Eye size={14} className="text-blue-300" />
-                          <span>{hour.humidity}%</span>
+
+                        <div className="text-xl font-bold text-white mb-2">
+                          {hour.temp}
+                          {tempUnit}
+                        </div>
+
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-center gap-1 text-xs text-white/70">
+                            <Droplets size={12} />
+                            <span>{hour.precipitation}%</span>
+                          </div>
+                          <div className="flex items-center justify-center gap-1 text-xs text-white/70">
+                            <Wind size={12} />
+                            <span>{hour.windSpeed}</span>
+                          </div>
+                          <div className="flex items-center justify-center gap-1 text-xs text-white/70">
+                            <Eye size={12} />
+                            <span>{hour.humidity}%</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>

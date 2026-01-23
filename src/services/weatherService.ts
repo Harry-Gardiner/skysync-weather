@@ -124,7 +124,7 @@ export async function fetchWeatherData(
       `https://api.open-meteo.com/v1/forecast?` +
         `latitude=${lat}&longitude=${lon}&` +
         `current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&` +
-        `hourly=temperature_2m,precipitation_probability,weather_code,is_day&` +
+        `hourly=temperature_2m,precipitation_probability,weather_code,is_day,wind_speed_10m&` +
         `daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,uv_index_max&` +
         `temperature_unit=${temperatureUnit}&wind_speed_unit=${windSpeedUnit}&precipitation_unit=${precipUnit}&` +
         `timezone=auto&forecast_days=7`,
@@ -152,6 +152,7 @@ export async function fetchWeatherData(
         temp: data.hourly.temperature_2m[index],
         weatherCode: data.hourly.weather_code[index],
         precipitationChance: data.hourly.precipitation_probability[index] || 0,
+        windSpeed: data.hourly.wind_speed_10m[index],
         isDay: data.hourly.is_day[index] === 1,
       }))
       .filter(
