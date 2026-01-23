@@ -123,7 +123,7 @@ export async function fetchWeatherData(
     const response = await fetch(
       `https://api.open-meteo.com/v1/forecast?` +
         `latitude=${lat}&longitude=${lon}&` +
-        `current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m&` +
+        `current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&` +
         `hourly=temperature_2m,precipitation_probability,weather_code,is_day&` +
         `daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,uv_index_max&` +
         `temperature_unit=${temperatureUnit}&wind_speed_unit=${windSpeedUnit}&precipitation_unit=${precipUnit}&` +
@@ -171,6 +171,7 @@ export async function fetchWeatherData(
         humidity: data.current.relative_humidity_2m,
         windSpeed: data.current.wind_speed_10m,
         windDirection: data.current.wind_direction_10m,
+        windGust: data.current.wind_gusts_10m || data.current.wind_speed_10m,
         pressure: data.current.surface_pressure,
         visibility: 10, // Open-Meteo doesn't provide visibility, use default
         uvIndex: data.daily.uv_index_max[0] || 0,

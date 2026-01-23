@@ -35,7 +35,7 @@ export default function CurrentWeather({
   onToggleFavorite,
 }: CurrentWeatherProps) {
   const { current } = data;
-  const tempUnit = settings.temperatureUnit === "celsius" ? "°C" : "°F";
+  const tempUnit = "°";
 
   // Wind speed display
   let speedUnit = "";
@@ -81,7 +81,12 @@ export default function CurrentWeather({
         <p className="text-white/80 text-lg mb-6">{location.country}</p>
 
         <div className="flex items-center justify-center gap-4 mb-4">
-          <span className="text-7xl md:text-8xl">
+          <span
+            className="text-7xl md:text-8xl"
+            role="img"
+            aria-label={current.description}
+            title={current.description}
+          >
             {getWeatherIcon(current.weatherCode, current.isDay)}
           </span>
           <div>
@@ -131,15 +136,20 @@ export default function CurrentWeather({
           <div className="text-2xl font-bold">
             {Math.round(current.windSpeed)} {speedUnit}
           </div>
-          <div className="text-sm text-white/70 flex items-center gap-1">
-            {getWindDirection(current.windDirection)}
-            <ArrowUp
-              size={14}
-              className="text-white inline-block"
-              style={{
-                transform: `rotate(${Math.round((current.windDirection + 180) % 360)}deg)`,
-              }}
-            />
+          <div className="text-sm text-white/70 flex items-center justify-between">
+            <span className="flex items-center gap-1">
+              {getWindDirection(current.windDirection)}
+              <ArrowUp
+                size={14}
+                className="text-white inline-block"
+                style={{
+                  transform: `rotate(${Math.round((current.windDirection + 180) % 360)}deg)`,
+                }}
+              />
+            </span>
+            <span className="text-xs">
+              (max {Math.round(current.windGust)})
+            </span>
           </div>
         </div>
 
@@ -150,6 +160,17 @@ export default function CurrentWeather({
             <span className="text-sm text-white/70">Visibility</span>
           </div>
           <div className="text-2xl font-bold">{current.visibility} km</div>
+          <div className="text-xs text-white/60">
+            {current.visibility >= 20
+              ? "Excellent"
+              : current.visibility >= 10
+                ? "Very Good"
+                : current.visibility >= 4
+                  ? "Good"
+                  : current.visibility >= 2
+                    ? "Moderate"
+                    : "Poor"}
+          </div>
         </div>
 
         {/* Pressure */}

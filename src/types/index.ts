@@ -12,6 +12,7 @@ export interface CurrentWeather {
   humidity: number;
   windSpeed: number;
   windDirection: number;
+  windGust: number;
   pressure: number;
   visibility: number;
   uvIndex: number;

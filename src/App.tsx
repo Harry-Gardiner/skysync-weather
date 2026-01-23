@@ -242,10 +242,28 @@ function App() {
               isLocating={isLocating}
             />
           </div>
-          <Settings
-            settings={settings}
-            onSettingsChange={handleSettingsChange}
-          />
+          <div className="flex items-center gap-3">
+            <Settings
+              settings={settings}
+              onSettingsChange={handleSettingsChange}
+            />
+            {/* Unit indicators */}
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-lg px-3 py-2 text-white text-sm">
+              <span className="font-medium">
+                {settings.temperatureUnit === "celsius" ? "°C" : "°F"}
+              </span>
+              <span className="text-white/50">|</span>
+              <span className="font-medium">
+                {settings.windSpeedUnit === "kmh"
+                  ? "km/h"
+                  : settings.windSpeedUnit === "mph"
+                    ? "mph"
+                    : settings.windSpeedUnit === "ms"
+                      ? "m/s"
+                      : "knots"}
+              </span>
+            </div>
+          </div>
         </div>
 
         {/* Favorites */}
@@ -326,7 +344,7 @@ function App() {
             />
 
             {/* Hourly Forecast */}
-            <HourlyForecast hourly={weatherData.hourly} settings={settings} />
+            <HourlyForecast hourly={weatherData.hourly} />
 
             {/* Air Quality */}
             {airQuality && <AirQuality data={airQuality} />}
