@@ -127,6 +127,53 @@ export function getWeatherIcon(weatherCode: number, isDay: boolean): string {
   return isDay ? "☀️" : "🌙";
 }
 
+export function getWeatherDescription(weatherCode: number): string {
+  // Thunderstorm
+  if (weatherCode >= 95) return "Thunderstorm";
+
+  // Snow showers
+  if (weatherCode >= 85 && weatherCode <= 86) return "Snow showers";
+
+  // Rain showers
+  if (weatherCode >= 80 && weatherCode <= 82) return "Rain showers";
+
+  // Snow
+  if (weatherCode >= 71 && weatherCode <= 77) return "Snow";
+
+  // Freezing rain
+  if (weatherCode >= 66 && weatherCode <= 67) return "Freezing rain";
+
+  // Rain
+  if (weatherCode >= 61 && weatherCode <= 65) {
+    if (weatherCode === 61) return "Light rain";
+    if (weatherCode === 63) return "Moderate rain";
+    return "Heavy rain";
+  }
+
+  // Freezing drizzle
+  if (weatherCode >= 56 && weatherCode <= 57) return "Freezing drizzle";
+
+  // Drizzle
+  if (weatherCode >= 51 && weatherCode <= 55) return "Drizzle";
+
+  // Fog
+  if (weatherCode === 45 || weatherCode === 48) return "Fog";
+
+  // Overcast
+  if (weatherCode === 3) return "Overcast";
+
+  // Partly cloudy
+  if (weatherCode === 2) return "Partly cloudy";
+
+  // Mainly clear
+  if (weatherCode === 1) return "Mainly clear";
+
+  // Clear sky
+  if (weatherCode === 0) return "Clear sky";
+
+  return "Clear";
+}
+
 export function getWindDirection(degrees: number): string {
   const directions = [
     "N",

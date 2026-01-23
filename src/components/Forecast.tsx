@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { WeatherData, Location } from "../types";
-import { getWeatherIcon, formatDate } from "../utils/weatherUtils";
+import {
+  getWeatherIcon,
+  formatDate,
+  getWeatherDescription,
+} from "../utils/weatherUtils";
 import { Droplets, Wind } from "lucide-react";
 import { UserSettings } from "./Settings";
 import DayDetail from "./DayDetail";
@@ -14,7 +18,7 @@ interface ForecastProps {
 export default function Forecast({ data, settings, location }: ForecastProps) {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
-  const tempUnit = settings.temperatureUnit === "celsius" ? "°C" : "°F";
+  const tempUnit = "°";
 
   let speedUnit = "";
   switch (settings.windSpeedUnit) {
@@ -68,7 +72,12 @@ export default function Forecast({ data, settings, location }: ForecastProps) {
                   </div>
 
                   {/* Weather Icon */}
-                  <div className="text-3xl md:text-4xl flex-shrink-0">
+                  <div
+                    className="text-3xl md:text-4xl flex-shrink-0"
+                    role="img"
+                    aria-label={getWeatherDescription(day.weatherCode)}
+                    title={getWeatherDescription(day.weatherCode)}
+                  >
                     {getWeatherIcon(day.weatherCode, true)}
                   </div>
 

@@ -2,7 +2,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight, Droplets } from "lucide-react";
 import { useCallback } from "react";
 import { HourlyForecast } from "../types";
-import { getWeatherIcon } from "../utils/weatherUtils";
+import { getWeatherIcon, getWeatherDescription } from "../utils/weatherUtils";
 import { UserSettings } from "./Settings";
 
 interface HourlyForecastCarouselProps {
@@ -28,7 +28,7 @@ export default function HourlyForecastCarousel({
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
 
-  const tempUnit = settings.temperatureUnit === "celsius" ? "°C" : "°F";
+  const tempUnit = "°";
 
   return (
     <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 text-white shadow-xl">
@@ -70,7 +70,12 @@ export default function HourlyForecastCarousel({
                 className="flex-none w-24 bg-white/10 rounded-xl p-4 text-center"
               >
                 <div className="text-sm font-medium mb-2">{timeStr}</div>
-                <div className="text-4xl mb-2">
+                <div
+                  className="text-4xl mb-2"
+                  role="img"
+                  aria-label={getWeatherDescription(hour.weatherCode)}
+                  title={getWeatherDescription(hour.weatherCode)}
+                >
                   {getWeatherIcon(hour.weatherCode, hour.isDay)}
                 </div>
                 <div className="text-xl font-bold mb-2">

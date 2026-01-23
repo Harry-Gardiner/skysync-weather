@@ -2,7 +2,11 @@ import { useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight, Droplets, Wind } from "lucide-react";
 import { WeatherData, Location } from "../types";
-import { getWeatherIcon, formatDate } from "../utils/weatherUtils";
+import {
+  getWeatherIcon,
+  formatDate,
+  getWeatherDescription,
+} from "../utils/weatherUtils";
 import { UserSettings } from "./Settings";
 import DayDetail from "./DayDetail";
 
@@ -32,7 +36,7 @@ export default function ForecastCarousel({
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
 
-  const tempUnit = settings.temperatureUnit === "celsius" ? "°C" : "°F";
+  const tempUnit = "°";
 
   let speedUnit = "";
   switch (settings.windSpeedUnit) {
@@ -79,7 +83,10 @@ export default function ForecastCarousel({
           <div className="flex gap-4">
             {data.daily.map((day, index) => {
               const isToday = index === 0;
-              const date = isToday ? "Today" : formatDate(day.date, "short");
+              const dateStr = new Date(day.date * 1000).toLocaleDateString(
+                "en-US",
+                { month: "short", day: "numeric" },
+              );
               const dayName = new Date(day.date * 1000).toLocaleDateString(
                 "en-US",
                 { weekday: "short" },
@@ -93,15 +100,20 @@ export default function ForecastCarousel({
                 >
                   {/* Date Section */}
                   <div className="mb-3 pb-3 border-b border-white/20">
-                    <div className="font-bold text-lg">{date}</div>
-                    {!isToday && (
-                      <div className="text-sm text-white/70">{dayName}</div>
-                    )}
+                    <div className="font-bold text-lg">
+                      {isToday ? "Today" : dayName}
+                    </div>
+                    <div className="text-sm text-white/70">{dateStr}</div>
                   </div>
 
                   {/* Weather Icon */}
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="text-5xl">
+                    <div
+                      className="text-5xl"
+                      role="img"
+                      aria-label={getWeatherDescription(day.weatherCode)}
+                      title={getWeatherDescription(day.weatherCode)}
+                    >
                       {getWeatherIcon(day.weatherCode, true)}
                     </div>
                   </div>
