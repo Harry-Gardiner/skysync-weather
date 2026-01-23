@@ -2,11 +2,7 @@ import { useState, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight, Droplets, Wind } from "lucide-react";
 import { WeatherData, Location } from "../types";
-import {
-  getWeatherIcon,
-  formatDate,
-  getWeatherDescription,
-} from "../utils/weatherUtils";
+import { getWeatherIcon, getWeatherDescription } from "../utils/weatherUtils";
 import { UserSettings } from "./Settings";
 import DayDetail from "./DayDetail";
 

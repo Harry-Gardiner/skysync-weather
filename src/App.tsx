@@ -344,7 +344,7 @@ function App() {
             />
 
             {/* Hourly Forecast */}
-            <HourlyForecast hourly={weatherData.hourly} settings={settings} />
+            <HourlyForecast hourly={weatherData.hourly} />
 
             {/* Air Quality */}
             {airQuality && <AirQuality data={airQuality} />}

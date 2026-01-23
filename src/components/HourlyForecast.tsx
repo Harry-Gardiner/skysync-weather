@@ -3,16 +3,13 @@ import { ChevronLeft, ChevronRight, Droplets } from "lucide-react";
 import { useCallback } from "react";
 import { HourlyForecast } from "../types";
 import { getWeatherIcon, getWeatherDescription } from "../utils/weatherUtils";
-import { UserSettings } from "./Settings";
 
 interface HourlyForecastCarouselProps {
   hourly: HourlyForecast[];
-  settings: UserSettings;
 }
 
 export default function HourlyForecastCarousel({
   hourly,
-  settings,
 }: HourlyForecastCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
