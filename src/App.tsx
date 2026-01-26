@@ -375,6 +375,13 @@ function App() {
 
       {/* Install Prompt */}
       <InstallPrompt />
+
+      {/* Footer */}
+      <footer className="mt-auto py-4 text-center">
+        <p className="text-white/60 text-xs">
+          Version {import.meta.env.VITE_APP_VERSION || "1.0.0"}
+        </p>
+      </footer>
     </div>
   );
 }
