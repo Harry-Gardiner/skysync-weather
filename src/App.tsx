@@ -360,7 +360,11 @@ function App() {
 
             {/* Rain Radar */}
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-6">
-              <h2 className="text-2xl font-bold text-white mb-4">Rain Radar</h2>
+              <h2 className="text-2xl font-bold text-white mb-2">Rain Radar</h2>
+              <p className="text-white/80 text-sm mb-4">
+                View rainfall patterns from the past 2 hours. Use controls to
+                play animation or step through frames.
+              </p>
               <RainRadar location={location} />
             </div>
           </div>
@@ -384,10 +388,30 @@ function App() {
       <InstallPrompt />
 
       {/* Footer */}
-      <footer className="mt-auto py-4 text-center">
-        <p className="text-white/60 text-xs">
-          Version {import.meta.env.VITE_APP_VERSION || "1.0.0"}
-        </p>
+      <footer className="mt-auto py-6 text-center">
+        <div className="text-white/60 text-xs space-y-2">
+          <p>
+            Weather data by{" "}
+            <a
+              href="https://open-meteo.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-white/80"
+            >
+              Open-Meteo
+            </a>{" "}
+            | Radar data by{" "}
+            <a
+              href="https://www.rainviewer.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-white/80"
+            >
+              RainViewer
+            </a>
+          </p>
+          <p>Version {import.meta.env.VITE_APP_VERSION || "2.0.0"}</p>
+        </div>
       </footer>
     </div>
   );
