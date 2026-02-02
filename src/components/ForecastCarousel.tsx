@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight, Droplets, Wind } from "lucide-react";
 import { WeatherData, Location } from "../types";
@@ -160,20 +161,23 @@ export default function ForecastCarousel({
       </div>
 
       {/* Day Detail Modal */}
-      {selectedDayData && selectedDay !== null && (
-        <DayDetail
-          date={selectedDayData.date}
-          tempMax={selectedDayData.tempMax}
-          tempMin={selectedDayData.tempMin}
-          weatherCode={selectedDayData.weatherCode}
-          precipitationChance={selectedDayData.precipitationChance}
-          windSpeed={selectedDayData.windSpeed}
-          lat={location.lat}
-          lon={location.lon}
-          settings={settings}
-          onClose={() => setSelectedDay(null)}
-        />
-      )}
+      {selectedDayData &&
+        selectedDay !== null &&
+        createPortal(
+          <DayDetail
+            date={selectedDayData.date}
+            tempMax={selectedDayData.tempMax}
+            tempMin={selectedDayData.tempMin}
+            weatherCode={selectedDayData.weatherCode}
+            precipitationChance={selectedDayData.precipitationChance}
+            windSpeed={selectedDayData.windSpeed}
+            lat={location.lat}
+            lon={location.lon}
+            settings={settings}
+            onClose={() => setSelectedDay(null)}
+          />,
+          document.body,
+        )}
     </>
   );
 }
