@@ -8,6 +8,7 @@ import Favorites from "./components/Favorites";
 import Settings, { UserSettings } from "./components/Settings";
 import AirQuality from "./components/AirQuality";
 import InstallPrompt from "./components/InstallPrompt";
+import RainRadar from "./components/RainRadar";
 import { Location, WeatherData, AirQualityData } from "./types";
 import { fetchWeatherData, fetchAirQuality } from "./services/weatherService";
 import { getBackgroundGradient } from "./utils/weatherUtils";
@@ -356,6 +357,12 @@ function App() {
               settings={settings}
               location={location}
             />
+
+            {/* Rain Radar */}
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6">
+              <h2 className="text-2xl font-bold text-white mb-4">Rain Radar</h2>
+              <RainRadar />
+            </div>
           </div>
         )}
 
