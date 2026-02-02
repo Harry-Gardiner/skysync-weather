@@ -1,22 +1,29 @@
-import { MapContainer, TileLayer } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import { useEffect, useState } from 'react';
-import { RefreshCw } from 'lucide-react';
+import { MapContainer, TileLayer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import { useEffect, useState } from "react";
+import { RefreshCw } from "lucide-react";
+import { Location } from "../types";
 
-const RainRadar = () => {
-  const [radarTileUrl, setRadarTileUrl] = useState('');
+interface RainRadarProps {
+  location?: Location;
+}
+
+const RainRadar = ({ location }: RainRadarProps) => {
+  const [radarTileUrl, setRadarTileUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // UK South/SW approximate coordinates
-  const position: [number, number] = [50.8, -3.5]; // Centered near Exeter/Devon
+  // Default to UK South/SW if no location, otherwise use selected location
+  const position: [number, number] = location
+    ? [location.lat, location.lon]
+    : [50.8, -3.5]; // Centered near Exeter/Devon
 
   const fetchRadar = () => {
     setLoading(true);
     setError(null);
-    fetch('https://api.rainviewer.com/public/weather-maps.json')
-      .then(res => res.json())
-      .then(data => {
+    fetch("https://api.rainviewer.com/public/weather-maps.json")
+      .then((res) => res.json())
+      .then((data) => {
         // Get the most recent radar map (last item in the 'radar.past' array)
         const latestTime = data.radar.past[data.radar.past.length - 1].time;
 
@@ -27,9 +34,9 @@ const RainRadar = () => {
         setRadarTileUrl(url);
         setLoading(false);
       })
-      .catch(err => {
-        console.error('Failed to fetch radar data:', err);
-        setError('Failed to load radar data');
+      .catch((err) => {
+        console.error("Failed to fetch radar data:", err);
+        setError("Failed to load radar data");
         setLoading(false);
       });
   };
@@ -63,7 +70,7 @@ const RainRadar = () => {
             </div>
           </div>
         )}
-        <MapContainer center={position} zoom={7} className="h-full w-full">
+        <MapContainer center={position} zoom={location ? 8 : 7} className="h-full w-full">
           {/* Base Map (Light/Clean style) */}
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -72,16 +79,20 @@ const RainRadar = () => {
 
           {/* Rain Overlay */}
           {radarTileUrl && (
-            <TileLayer
-              url={radarTileUrl}
-              opacity={0.6}
-              zIndex={10}
-            />
+            <TileLayer url={radarTileUrl} opacity={0.6} zIndex={10} />
           )}
         </MapContainer>
       </div>
       <div className="text-xs text-gray-500 mt-2 text-center">
-        Radar data provided by <a href="https://www.rainviewer.com/" target="_blank" rel="noopener noreferrer" className="underline">RainViewer</a>
+        Radar data provided by{" "}
+        <a
+          href="https://www.rainviewer.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline"
+        >
+          RainViewer
+        </a>
       </div>
     </div>
   );

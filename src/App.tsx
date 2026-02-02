@@ -361,7 +361,7 @@ function App() {
             {/* Rain Radar */}
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-6">
               <h2 className="text-2xl font-bold text-white mb-4">Rain Radar</h2>
-              <RainRadar />
+              <RainRadar location={location} />
             </div>
           </div>
         )}
