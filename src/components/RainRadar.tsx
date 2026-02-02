@@ -70,7 +70,11 @@ const RainRadar = ({ location }: RainRadarProps) => {
             </div>
           </div>
         )}
-        <MapContainer center={position} zoom={location ? 8 : 7} className="h-full w-full">
+        <MapContainer
+          center={position}
+          zoom={location ? 8 : 7}
+          className="h-full w-full"
+        >
           {/* Base Map (Light/Clean style) */}
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
