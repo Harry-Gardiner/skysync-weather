@@ -351,13 +351,6 @@ function App() {
             {/* Air Quality */}
             {airQuality && <AirQuality data={airQuality} />}
 
-            {/* 7-Day Forecast */}
-            <ForecastCarousel
-              data={weatherData}
-              settings={settings}
-              location={location}
-            />
-
             {/* Rain Radar */}
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-6">
               <h2 className="text-2xl font-bold text-white mb-2">Rain Radar</h2>
@@ -367,6 +360,13 @@ function App() {
               </p>
               <RainRadar location={location} />
             </div>
+
+            {/* 7-Day Forecast */}
+            <ForecastCarousel
+              data={weatherData}
+              settings={settings}
+              location={location}
+            />
           </div>
         )}
 

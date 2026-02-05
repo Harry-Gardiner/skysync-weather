@@ -42,7 +42,7 @@ const RainRadar = ({ location }: RainRadarProps) => {
         const frames: RadarFrame[] = data.radar.past.map(
           (frame: { time: number; path: string }) => ({
             time: frame.time,
-            path: `https://tilecache.rainviewer.com${frame.path}/512/{z}/{x}/{y}/2/1_1.png`,
+            path: `https://tilecache.rainviewer.com${frame.path}/256/{z}/{x}/{y}/2/1_1.png`,
           }),
         );
         setRadarFrames(frames);
@@ -172,7 +172,9 @@ const RainRadar = ({ location }: RainRadarProps) => {
 
         <MapContainer
           center={position}
-          zoom={location ? 8 : 7}
+          zoom={location ? 6 : 5}
+          minZoom={3}
+          maxZoom={7}
           className="h-full w-full"
         >
           {/* Base Map (Light/Clean style) */}
