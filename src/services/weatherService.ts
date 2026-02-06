@@ -73,11 +73,9 @@ export async function reverseGeocode(
   if (cached) return cached;
 
   try {
-    // Open-Meteo doesn't have reverse geocoding, so we'll use a nearby search
-    // This will find the closest city to the coordinates
+    // Use BigDataCloud's free reverse geocoding API
     const response = await fetch(
-      `https://geocoding-api.open-meteo.com/v1/search?` +
-        `latitude=${lat}&longitude=${lon}&count=1&language=en&format=json`,
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`,
     );
 
     if (!response.ok) {
@@ -86,17 +84,23 @@ export async function reverseGeocode(
 
     const data = await response.json();
 
-    if (!data.results || data.results.length === 0) {
+    if (!data.locality && !data.city && !data.principalSubdivision) {
       return null;
     }
 
-    const item = data.results[0];
+    // Use city name, or locality, or principal subdivision as fallback
+    const name =
+      data.city ||
+      data.locality ||
+      data.principalSubdivision ||
+      "Unknown Location";
+
     const result: GeocodingResult = {
-      name: item.name,
-      lat: item.latitude,
-      lon: item.longitude,
-      country: item.country,
-      state: item.admin1,
+      name: name,
+      lat: lat,
+      lon: lon,
+      country: data.countryName || data.countryCode || "Unknown",
+      state: data.principalSubdivision || data.locality || undefined,
     };
 
     setCachedData(cacheKey, result);
